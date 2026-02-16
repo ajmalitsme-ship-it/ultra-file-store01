@@ -18,14 +18,14 @@
 
 A powerful **Telegram File Store Bot** with:
 
-* Force-Subscribe system
+* multi Force-Subscribe system
 * Auto delete protection
 * Premium users system
 * Custom buttons & messages
 * URL shortener support
 * Multi-admin control
 * Secure protected content
-
+* web stream file + web admin panel
 Fully customizable and deployable on **VPS, Local, or Heroku**.
 
 ---
