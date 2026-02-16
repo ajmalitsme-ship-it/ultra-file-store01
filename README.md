@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-<a href="#"><img src="https://img.shields.io/badge/Bot-Ajmal%20Store-blue?style=for-the-badge&logo=telegram" /></a>
+<a href="#"><img src="https://img.shields.io/badge/Bot-ultra%20Store-blue?style=for-the-badge&logo=telegram" /></a>
 <a href="#"><img src="https://img.shields.io/badge/Written%20in-Python-orange?style=for-the-badge&logo=python" /></a>
 <a href="#"><img src="https://img.shields.io/badge/License-GPL--3.0-green?style=for-the-badge" /></a>
 </p>
