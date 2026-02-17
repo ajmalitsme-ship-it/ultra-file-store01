@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pyrogram
+tgcrypto
+motor
+redis
+python-dotenv
+aiofiles
+boto3
