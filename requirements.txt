@@ -1,0 +1,11 @@
+pyrogram
+tgcrypto
+fastapi
+uvicorn
+motor
+aiofiles
+jinja2
+python-multipart
+passlib[bcrypt]
+python-dotenv
+redis
