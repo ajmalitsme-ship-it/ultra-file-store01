@@ -1,76 +1,53 @@
-"""
-Loader Module
--------------
-
-Responsible for:
-
-- Initializing database
-- Attaching DB to client
-- Preparing default settings
-- Preparing global bot attributes
-- Pre-loading configuration flags
-
-This keeps bot.py clean and production-ready.
-"""
-
 from motor.motor_asyncio import AsyncIOMotorClient
-from bot.config import Config
-from bot.helper.database import Database
+from config import Config
+from pyrogram import Client
+import asyncio
 
+async def load_core(client):
+    mongo = AsyncIOMotorClient(Config.MONGO_URI)
+    db = mongo["filestore"]
 
-async def load_bot(client):
-    """
-    Initialize and attach all required services to client.
-    """
+    client.mongo = mongo
+    client.db = db
 
-    # -------------------------
-    # MongoDB Initialization
-    # -------------------------
-    mongo_client = AsyncIOMotorClient(Config.MONGO_URI)
+    client.users = db["users"]
+    client.settings = db["settings"]
+    client.files = db["files"]
+    client.clones = db["clones"]
 
-    client.mongo = mongo_client
-    client.db = mongo_client["bothubots"]
-
-    # Attach collections for quick access
-    client.users = client.db["users"]
-    client.files = client.db["files"]
-    client.requests = client.db["requests"]
-    client.settings = client.db["settings"]
-
-    # -------------------------
-    # Ensure Default Settings
-    # -------------------------
-    settings = await client.settings.find_one({})
-
-    if not settings:
+    # Default settings
+    if not await client.settings.find_one({}):
         await client.settings.insert_one({
-            "force_sub": False,
-            "required_channels": [],
-            "premium_bypass": True,
-            "request_mode": "normal",  # normal / premium
+            "force_sub": True,
             "shortlink": True,
-            "auto_delete": 600
+            "auto_delete": 600,
+            "signed_stream": True,
+            "db_channels": [Config.DB_CHANNEL]
         })
 
-    # -------------------------
-    # Attach Runtime Flags
-    # -------------------------
-    settings = await client.settings.find_one({})
+    print("Core system loaded.")
 
-    client.force_sub_enabled = settings.get("force_sub", False)
-    client.premium_bypass = settings.get("premium_bypass", True)
-    client.request_mode = settings.get("request_mode", "normal")
-    client.shortlink_enabled = settings.get("shortlink", True)
-    client.auto_delete_time = settings.get("auto_delete", 600)
+# -----------------------------------
+# Clone Loader
+# -----------------------------------
 
-    # -------------------------
-    # Attach Admin List
-    # -------------------------
-    client.admins = [Config.OWNER_ID]
+async def load_clones(main_client):
+    clones = await main_client.clones.find({"active": True}).to_list(None)
 
-    # -------------------------
-    # Streaming Base Domain
-    # -------------------------
-    client.domain = Config.DOMAIN
+    for clone in clones:
+        try:
+            clone_app = Client(
+                f"clone_{clone['_id']}",
+                api_id=Config.API_ID,
+                api_hash=Config.API_HASH,
+                bot_token=clone["token"],
+                plugins=dict(root="bot.plugins")
+            )
 
-    print("✅ Bothubots system loaded successfully.")
+            await clone_app.start()
+            await load_core(clone_app)
+
+            print(f"Clone started: {clone['token']}")
+
+        except Exception as e:
+            print(f"Clone failed: {e}")
