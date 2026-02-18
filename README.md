@@ -61,20 +61,19 @@ pip3 install -U -r requirements.txt
 Open **config.py** and fill:
 
 ```python
-SESSION = "your_session"
-TOKEN = "your_bot_token"
-API_ID = 12345
-API_HASH = "your_api_hash"
+API_ID=123456
+API_HASH=xxxxx
+BOT_TOKEN=xxxxx
 
-DB_URI = "your_mongodb_uri"
-DB_NAME = "ajmal_filestore"
+OWNER_ID=123456789
+MONGO_URI=mongodb://mongo:27017
 
-ADMINS = [123456789]
+DB_CHANNEL=-100xxxxxxxxxx
 
-DB_CHANNEL = -100xxxxxxxxxx
-AUTO_DEL = 300
-PROTECT = True
-DISABLE_BTN = False
+DOMAIN=https://yourdomain.com
+
+ADMIN_USER=admin
+ADMIN_PASS=strongpassword
 ```
 
 ### 4️⃣ Run Bot
