@@ -11,6 +11,7 @@ class Config:
     OWNER_ID = int(os.getenv("OWNER_ID"))
     MONGO_URI = os.getenv("MONGO_URI")
 
-    DB_CHANNEL = int(os.getenv("DB_CHANNEL"))
-
+    MAIN_DB_CHANNEL = int(os.getenv("DB_CHANNEL"))
     DOMAIN = os.getenv("DOMAIN")
+
+    STREAM_SECRET = os.getenv("STREAM_SECRET", "supersecretkey")
